@@ -3,6 +3,7 @@ import { NODE_ENV, DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } from '@config';
 import UserModel from '@models/users.model';
 import UserTypeModel from '@models/userType.model';
 import MetaDataModel from '@models/metaData.model';
+import UserMetaDataModel from '@/models/userMetaData.model';
 import { logger } from '@utils/logger';
 
 const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
@@ -37,6 +38,7 @@ sequelize.authenticate();
 
 // try {
 const DB = {
+  UserMetaData: UserMetaDataModel(sequelize),
   UserType: UserTypeModel(sequelize),
   MetaData: MetaDataModel(sequelize),
   Users: UserModel(sequelize),
@@ -46,8 +48,11 @@ const DB = {
 };
 DB.UserType.hasMany(DB.Users, { foreignKey: 'user_type', as: 'user' });
 DB.Users.belongsTo(DB.UserType, { foreignKey: 'user_type', as: 'user_type_data' });
-// } catch (e) {
-// console.log(e);
-// }
+
+DB.MetaData.hasMany(DB.UserMetaData, { foreignKey: 'meta_data_id', as: 'meta_data' });
+DB.UserMetaData.belongsTo(DB.MetaData, { foreignKey: 'meta_data_id', as: 'user_meta_data' });
+
+DB.Users.hasMany(DB.UserMetaData, { foreignKey: 'user_id', as: 'user_meta_data' });
+DB.UserMetaData.belongsTo(DB.Users, { foreignKey: 'user_id', as: 'user' });
 
 export default DB;

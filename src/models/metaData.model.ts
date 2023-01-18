@@ -5,7 +5,6 @@ import { MetaData } from '@interfaces/metaData.interface';
 
 export class MetaDataModel extends Model<MetaData> implements MetaData {
   public key: string;
-  public value: string;
 }
 
 export default function (sequelize: Sequelize): typeof MetaDataModel {
@@ -13,11 +12,7 @@ export default function (sequelize: Sequelize): typeof MetaDataModel {
     {
       key: {
         allowNull: true,
-        type: DataTypes.STRING(10),
-      },
-      value: {
-        allowNull: false,
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(50),
       },
     },
     {
