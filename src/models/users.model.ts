@@ -30,6 +30,7 @@ export default function (sequelize: Sequelize): typeof UserModel {
       },
       userType: {
         type: DataTypes.INTEGER,
+        defaultValue: 1,
         allowNull: false,
         references: {
           model: UserTypeModel,

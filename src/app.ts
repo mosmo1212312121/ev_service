@@ -44,7 +44,7 @@ class App {
   }
 
   private connectToDatabase() {
-    DB.sequelize.sync({ force: true });
+    // DB.sequelize.sync({ force: true });
   }
 
   private initializeMiddlewares() {
