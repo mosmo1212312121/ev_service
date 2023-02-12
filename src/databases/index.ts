@@ -34,6 +34,7 @@ const sequelize = new Sequelize.Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
 //   // ...baseOption,
 // });
 
+logger.info('Connecting to database...');
 sequelize.authenticate();
 
 // try {
@@ -46,13 +47,16 @@ const DB = {
   sequelize, // connection instance (RAW queries)
   Sequelize, // library
 };
-DB.UserType.hasMany(DB.Users, { foreignKey: 'user_type', as: 'user' });
-DB.Users.belongsTo(DB.UserType, { foreignKey: 'user_type', as: 'user_type_data' });
+try {
+  DB.UserType.hasMany(DB.Users, { foreignKey: 'user_type', as: 'user' });
+  DB.Users.belongsTo(DB.UserType, { foreignKey: 'user_type', as: 'user_type_data' });
 
-DB.MetaData.hasMany(DB.UserMetaData, { foreignKey: 'meta_data_id', as: 'meta_data' });
-DB.UserMetaData.belongsTo(DB.MetaData, { foreignKey: 'meta_data_id', as: 'user_meta_data' });
+  DB.MetaData.hasMany(DB.UserMetaData, { foreignKey: 'meta_data_id', as: 'meta_data' });
+  DB.UserMetaData.belongsTo(DB.MetaData, { foreignKey: 'meta_data_id', as: 'user_meta_data' });
 
-DB.Users.hasMany(DB.UserMetaData, { foreignKey: 'user_id', as: 'user_meta_data' });
-DB.UserMetaData.belongsTo(DB.Users, { foreignKey: 'user_id', as: 'user' });
-
+  DB.Users.hasMany(DB.UserMetaData, { foreignKey: 'user_id', as: 'user_meta_data' });
+  DB.UserMetaData.belongsTo(DB.Users, { foreignKey: 'user_id', as: 'user' });
+} catch (e) {
+  logger.info(e);
+}
 export default DB;
